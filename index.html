@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leaderboard de Cabos CAT6 - Escola Profissional de Trancoso</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #121212;
+      color: #e0e0e0;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #ffd700;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+      color: #f0f0f0;
+    }
+    input, button {
+      padding: 8px;
+      font-size: 14px;
+      background: #2a2a2a;
+      color: #fff;
+      border: 1px solid #444;
+      border-radius: 4px;
+    }
+    input:focus {
+      outline: 2px solid #2563eb;
+    }
+    button {
+      grid-column: 1 / -1;
+      cursor: pointer;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+    button:hover {
+      background: #1e40af;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #2a2a2a;
+      color: #e0e0e0;
+    }
+    th, td {
+      padding: 10px;
+      text-align: center;
+      border-bottom: 1px solid #444;
+    }
+    th {
+      background: #3a3a3a;
+    }
+    tr:nth-child(even) {
+      background: #252525;
+    }
+    .note {
+      font-size: 13px;
+      color: #aaa;
+      margin-top: 10px;
+    }
+    .teacher-only { display: none; }
+
+    .first-place {
+      font-size: 1.6em;
+      font-weight: bold;
+      color: #FFD700; /* Gold */
+    }
+    .second-place {
+      font-size: 1.4em;
+      font-weight: bold;
+      color: #C0C0C0; /* Silver */
+    }
+    .third-place {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #CD7F32; /* Bronze */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🏆 Leaderboard de Cravação de Cabos CAT6 🏆<br><small>Escola Profissional de Trancoso</small></h1>
+
+    <div class="teacher-only">
+      <form id="entryForm">
+        <div>
+          <label>👤 Nome do aluno</label>
+          <input type="text" id="name" />
+        </div>
+        <div>
+          <label>⏱ Tempo (minutos)</label>
+          <input type="number" id="minutes" min="0" />
+        </div>
+        <div>
+          <label>⏱ Tempo (segundos)</label>
+          <input type="number" id="seconds" min="0" max="59" />
+        </div>
+        <div>
+          <label>🟢 Condutores funcionais (0–8)</label>
+          <input type="number" id="wires" min="0" max="8" />
+        </div>
+        <div>
+          <label>📅 Data</label>
+          <input type="date" id="date" />
+        </div>
+        <button type="submit">➕ Adicionar resultado</button>
+      </form>
+    </div>
+
+    <table id="leaderboard">
+      <thead>
+        <tr>
+          <th>🥇 Posição</th>
+          <th>👨‍🎓 Aluno</th>
+          <th>⏲ Tempo</th>
+          <th>🟢 Condutores funcionais</th>
+          <th>⭐ Pontuação</th>
+          <th>📅 Data</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <p class="note">
+      Regra de classificação: mais condutores funcionais é melhor. Em caso de empate, ganha o menor tempo.<br>
+      Os alunos podem visualizar online, mas só o professor pode adicionar ou editar resultados.
+    </p>
+  </div>
+
+  <script>
+    const tbody = document.querySelector('#leaderboard tbody');
+
+    const teacherData = [
+      { name: 'Ana 😺', minutes: 3, seconds: 20, wires: 8, totalSeconds: 200, date: '2026-01-10' },
+      { name: 'Bruno 🐱', minutes: 4, seconds: 5, wires: 7, totalSeconds: 245, date: '2026-01-11' },
+      { name: 'Carlos 🐾', minutes: 3, seconds: 50, wires: 8, totalSeconds: 230, date: '2026-01-12' },
+      { name: 'Diana 🐈', minutes: 5, seconds: 0, wires: 6, totalSeconds: 300, date: '2026-01-13' },
+      { name: 'Eduardo 🐱‍👤', minutes: 4, seconds: 30, wires: 7, totalSeconds: 270, date: '2026-01-14' },
+      { name: 'Fábio 🐕', minutes: 3, seconds: 45, wires: 8, totalSeconds: 225, date: '2026-01-10' },
+      { name: 'Gabriela 🦊', minutes: 4, seconds: 10, wires: 7, totalSeconds: 250, date: '2026-01-11' },
+      { name: 'Hugo 🐇', minutes: 5, seconds: 15, wires: 6, totalSeconds: 315, date: '2026-01-12' },
+      { name: 'Inês 🐦', minutes: 4, seconds: 0, wires: 7, totalSeconds: 240, date: '2026-01-13' },
+      { name: 'João 🦁', minutes: 3, seconds: 55, wires: 8, totalSeconds: 235, date: '2026-01-14' },
+      { name: 'Karen 🐼', minutes: 4, seconds: 20, wires: 7, totalSeconds: 260, date: '2026-01-10' },
+      { name: 'Luís 🐨', minutes: 5, seconds: 5, wires: 6, totalSeconds: 305, date: '2026-01-11' },
+      { name: 'Marta 🐯', minutes: 4, seconds: 15, wires: 7, totalSeconds: 255, date: '2026-01-12' },
+      { name: 'Nuno 🐵', minutes: 3, seconds: 40, wires: 8, totalSeconds: 220, date: '2026-01-13' },
+      { name: 'Olga 🐸', minutes: 4, seconds: 25, wires: 7, totalSeconds: 265, date: '2026-01-14' }
+    ];
+
+    function render() {
+      teacherData.sort((a, b) => {
+        if (b.wires !== a.wires) return b.wires - a.wires;
+        return a.totalSeconds - b.totalSeconds;
+      });
+
+      tbody.innerHTML = '';
+      teacherData.forEach((entry, index) => {
+        const tr = document.createElement('tr');
+        let nameClass = '';
+        if(index === 0) nameClass = 'first-place';
+        else if(index === 1) nameClass = 'second-place';
+        else if(index === 2) nameClass = 'third-place';
+
+        tr.innerHTML = `
+          <td>${index + 1}</td>
+          <td class="${nameClass}">${entry.name}</td>
+          <td>⏱ ${entry.minutes}m ${entry.seconds}s</td>
+          <td>🟢 ${entry.wires} / 8</td>
+          <td>⭐ ${entry.wires * 100 - entry.totalSeconds}</td>
+          <td>📅 ${entry.date}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>
