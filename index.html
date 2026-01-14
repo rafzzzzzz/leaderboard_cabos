@@ -3,160 +3,219 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cabos de Rede</title>
+  <title>Leaderboard - Cabos de Rede - GEI/PI</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Poppins', sans-serif;
       background: linear-gradient(135deg, #121212, #1a1a1a);
       color: #e0e0e0;
       margin: 0;
       padding: 20px;
     }
+
     h1 {
+      font-family: 'Bebas Neue', cursive;
       text-align: center;
       color: #ffd700;
       text-shadow: 2px 2px 4px #000;
-      margin-bottom: 30px;
-      font-size: 1.8em;
+      margin-bottom: 10px;
+      font-size: 3em;
+      letter-spacing: 2px;
     }
+
+    .subtitle {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 1em;
+      opacity: 0.85;
+    }
+
     .container {
-      max-width: 1000px;
+      max-width: 1100px;
       margin: auto;
       background: #1e1e1e;
       padding: 25px;
-      border-radius: 12px;
+      border-radius: 14px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.7);
       overflow-x: auto;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
       background: #2a2a2a;
-      color: #e0e0e0;
-      border-radius: 8px;
-      min-width: 600px;
+      border-radius: 10px;
+      min-width: 700px;
     }
+
     th, td {
       padding: 12px;
       text-align: center;
       border-bottom: 1px solid #444;
-      word-wrap: break-word;
     }
+
     th {
       background: #3a3a3a;
       text-transform: uppercase;
       letter-spacing: 1px;
+      position: sticky;
+      top: 0;
+      z-index: 2;
     }
+
+    tr {
+      animation: fadeIn 0.4s ease-in;
+    }
+
     tr:nth-child(even) {
       background: #252525;
     }
+
     tr:hover {
       background: #333;
       transform: scale(1.01);
       transition: all 0.2s ease-in-out;
     }
+
     .first-place {
-      font-size: 1.8em;
+      font-size: 1.9em;
       font-weight: bold;
       color: #FFD700;
-      text-shadow: 1px 1px 3px #000;
     }
+
     .second-place {
       font-size: 1.6em;
       font-weight: bold;
       color: #C0C0C0;
-      text-shadow: 1px 1px 2px #000;
     }
+
     .third-place {
       font-size: 1.4em;
       font-weight: bold;
       color: #CD7F32;
-      text-shadow: 1px 1px 2px #000;
     }
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 1.5em;
-      }
-      th, td {
-        padding: 8px;
-        font-size: 0.9em;
-      }
-      .first-place {
-        font-size: 1.5em;
-      }
-      .second-place {
-        font-size: 1.3em;
-      }
-      .third-place {
-        font-size: 1.1em;
+
+    .perfect {
+      box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+
+    .failed {
+      opacity: 0.5;
+    }
+
+    .bar {
+      background: #444;
+      border-radius: 6px;
+      overflow: hidden;
+      height: 10px;
+      margin-top: 4px;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #00ff99, #00cc66);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.85em;
+      opacity: 0.7;
+    }
+
+    @media (max-width: 600px) {
+      th:nth-child(5), td:nth-child(5),
+      th:nth-child(6), td:nth-child(6) {
+        display: none;
       }
     }
-    @media (max-width: 480px) {
-      body {
-        padding: 10px;
-      }
-      table {
-        min-width: 100%;
-        font-size: 0.8em;
-      }
-      th, td {
-        padding: 6px;
-      }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🏆 Leaderboard - Cabos de Rede 🏆<br><small>GEI/PI</small></h1>
 
+  <h1>🏆 Leaderboard Cabos de Rede</h1>
+  <div class="subtitle">🏫 Escola Profissional de Trancoso · GEI/PI</div>
+
+  <div class="container">
     <table id="leaderboard">
       <thead>
         <tr>
-          <th>🥇 Posição</th>
-          <th>👨‍🎓 Aluno</th>
-          <th>⏲ Tempo</th>
-          <th>🟢 Condutores funcionais</th>
-          <th>⭐ Pontuação</th>
-          <th>📅 Data</th>
+          <th>Posição</th>
+          <th>Aluno</th>
+          <th>Tempo</th>
+          <th>Condutores</th>
+          <th>Pontuação</th>
+          <th>Data</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
   </div>
 
+  <footer>
+    ⭐ Pontuação = (condutores × 100) − tempo (segundos)
+  </footer>
+
   <script>
     const tbody = document.querySelector('#leaderboard tbody');
 
-    const teacherData = [
-      { name: 'Ian 🐼', minutes: 14, seconds: 30, wires: 8, totalSeconds: 870, date: '14/01/2026' },
-      { name: 'Kilza 🐨', minutes: 27, seconds: 10, wires: 0, totalSeconds: 1630, date: '14/01/2026' },
-      { name: 'Karia 🐯', minutes: 19, seconds: 10, wires: 5, totalSeconds: 1150, date: '14/01/2026' },
-      { name: 'Márcio 🦁', minutes: 5, seconds: 0, wires: 5, totalSeconds: 300, date: '14/01/2026' },
-      { name: 'Diogo 🐸', minutes: 13, seconds: 20, wires: 7, totalSeconds: 800, date: '14/01/2026' }
+    const data = [
+      { name: 'Márcio 🦁', minutes: 12, seconds: 0, wires: 5, date: '14/01/2026' },
+      { name: 'Ian 🐼', minutes: 14, seconds: 30, wires: 8, date: '14/01/2026' },
+      { name: 'Diogo 🐸', minutes: 13, seconds: 20, wires: 7, date: '14/01/2026' },
+      { name: 'Karia 🐯', minutes: 19, seconds: 10, wires: 5, date: '14/01/2026' },
+      { name: 'Kilza 🐨', minutes: 27, seconds: 10, wires: 0, date: '14/01/2026' }
     ];
 
+    data.forEach(d => d.totalSeconds = d.minutes * 60 + d.seconds);
+
     function render() {
-      teacherData.sort((a, b) => {
+      data.sort((a, b) => {
         if (b.wires !== a.wires) return b.wires - a.wires;
         return a.totalSeconds - b.totalSeconds;
       });
 
       tbody.innerHTML = '';
-      teacherData.forEach((entry, index) => {
+
+      data.forEach((entry, index) => {
         const tr = document.createElement('tr');
+        if (entry.wires === 8) tr.classList.add('perfect');
+        if (entry.wires === 0) tr.classList.add('failed');
+
+        const medals = ['🥇', '🥈', '🥉'];
+        const position = index < 3 ? medals[index] : index + 1;
+
         let nameClass = '';
-        if(index === 0) nameClass = 'first-place';
-        else if(index === 1) nameClass = 'second-place';
-        else if(index === 2) nameClass = 'third-place';
+        if (index === 0) nameClass = 'first-place';
+        else if (index === 1) nameClass = 'second-place';
+        else if (index === 2) nameClass = 'third-place';
+
+        const percent = (entry.wires / 8) * 100;
+        const score = entry.wires * 100 - entry.totalSeconds;
 
         tr.innerHTML = `
-          <td>${index + 1}</td>
+          <td>${position}</td>
           <td class="${nameClass}">${entry.name}</td>
           <td>⏱ ${entry.minutes}m ${entry.seconds}s</td>
-          <td> ${entry.wires} / 8</td>
-          <td> ${entry.wires * 100 - entry.totalSeconds}</td>
-          <td> ${entry.date}</td>
+          <td>
+            ${entry.wires} / 8
+            <div class="bar"><div class="bar-fill" style="width:${percent}%"></div></div>
+          </td>
+          <td>${score}</td>
+          <td>${entry.date}</td>
         `;
+
         tbody.appendChild(tr);
       });
     }
