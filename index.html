@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Leaderboard - Cabos de Rede - GEI/PI</title>
+  <title>Cabos de Rede - GEI/PI</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -120,6 +120,7 @@
     .bar-fill {
       height: 100%;
       background: linear-gradient(90deg, #00ff99, #00cc66);
+      transition: width 0.5s ease;
     }
 
     button {
@@ -131,6 +132,7 @@
       border-radius: 8px;
       cursor: pointer;
       font-family: 'Poppins', sans-serif;
+      transition: all 0.3s ease;
     }
 
     button.active {
@@ -138,17 +140,6 @@
       color: #000;
       box-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
       font-weight: 600;
-    }
-
-
-      background: #333;
-      color: #e0e0e0;
-      border: none;
-      padding: 8px 14px;
-      margin: 4px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-family: 'Poppins', sans-serif;
     }
 
     button:hover {
@@ -177,8 +168,8 @@
 </head>
 <body>
 
-  <h1>🏆 Leaderboard Cabos de Rede</h1>
-  <div class="subtitle">🏫 Escola Profissional de Trancoso · GEI/PI</div>
+  <h1>🏆 Leaderboard Cabos de Rede 🏆</h1>
+  <div class="subtitle">GEI/PI</div>
 
   <div class="container">
     <div style="text-align:center; margin-bottom:15px;">
@@ -210,7 +201,7 @@
     const tbody = document.querySelector('#leaderboard tbody');
 
     const data = [
-      { name: 'Márcio 🦁', minutes: 5, seconds: 0, wires: 5, date: '14/01/2026' },
+      { name: 'Márcio 🦁', minutes: 13, seconds: 0, wires: 5, date: '14/01/2026' },
       { name: 'Ian 🐼', minutes: 14, seconds: 30, wires: 8, date: '14/01/2026' },
       { name: 'Diogo 🐸', minutes: 13, seconds: 20, wires: 7, date: '14/01/2026' },
       { name: 'Karia 🐯', minutes: 19, seconds: 10, wires: 5, date: '14/01/2026' },
@@ -232,7 +223,7 @@
     function sortByDate() { currentSort = 'date'; setActiveButton('date'); render(); }
 
     function render() {
-            data.sort((a, b) => {
+      data.sort((a, b) => {
         switch (currentSort) {
           case 'time':
             return a.totalSeconds - b.totalSeconds;
