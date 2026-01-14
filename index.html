@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cabos de Rede - GEI/PI</title>
+  <title>Leaderboard - Cabos de Rede - GEI/PI</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -154,9 +154,26 @@
     }
 
     @media (max-width: 600px) {
+      h1 {
+        font-size: 2em;
+      }
+      table {
+        min-width: 100%;
+        font-size: 0.75em;
+      }
+      th, td {
+        padding: 6px 4px;
+      }
+      .bar {
+        height: 6px;
+      }
+      button {
+        padding: 6px 8px;
+        font-size: 0.75em;
+      }
       th:nth-child(5), td:nth-child(5),
       th:nth-child(6), td:nth-child(6) {
-        display: none;
+        display: table-cell;
       }
     }
 
