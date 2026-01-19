@@ -218,11 +218,11 @@
     const tbody = document.querySelector('#leaderboard tbody');
 
     const data = [
-      { name: 'Márcio 🦁', minutes: 13, seconds: 0, wires: 5, date: '14/01/2026' },
-      { name: 'Ian 🐼', minutes: 14, seconds: 30, wires: 8, date: '14/01/2026' },
-      { name: 'Diogo 🐸', minutes: 13, seconds: 20, wires: 7, date: '14/01/2026' },
-      { name: 'Karia 🐯', minutes: 19, seconds: 10, wires: 5, date: '14/01/2026' },
-      { name: 'Kilza 🐨', minutes: 27, seconds: 10, wires: 0, date: '14/01/2026' }
+      { name: 'Márcio 🥇', minutes: 13, seconds: 0, wires: 5, date: '14/01/2026' },
+      { name: 'Ian 🤫', minutes: 14, seconds: 30, wires: 8, date: '14/01/2026' },
+      { name: 'Diogo 🕉️', minutes: 13, seconds: 20, wires: 7, date: '14/01/2026' },
+      { name: 'Karia 😒', minutes: 19, seconds: 10, wires: 5, date: '14/01/2026' },
+      { name: 'Kilza ☺️', minutes: 27, seconds: 10, wires: 0, date: '14/01/2026' }
     ];
 
     data.forEach(d => d.totalSeconds = d.minutes * 60 + d.seconds);
@@ -238,6 +238,7 @@
     function sortByTime() { currentSort = 'time'; setActiveButton('time'); render(); }
     function sortByWires() { currentSort = 'wires'; setActiveButton('wires'); render(); }
     function sortByDate() { currentSort = 'date'; setActiveButton('date'); render(); }
+    
 
     function render() {
       data.sort((a, b) => {
