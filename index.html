@@ -10,83 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #121212, #1a1a1a);
-      color: #e0e0e0;
-      margin: 0;
-      padding: 20px;
-    }
-
-    h1 {
-      font-family: 'Bebas Neue', cursive;
-      text-align: center;
-      color: #ffd700;
-      text-shadow: 2px 2px 4px #000;
-      margin-bottom: 10px;
-      font-size: 3em;
-      letter-spacing: 2px;
-    }
-
-    .subtitle {
-      text-align: center;
-      margin-bottom: 25px;
-      font-size: 1em;
-      opacity: 0.85;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: auto;
-      background: #1e1e1e;
-      padding: 25px;
-      border-radius: 14px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.7);
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #2a2a2a;
-      border-radius: 10px;
-      min-width: 700px;
-    }
-
-    th, td {
-      padding: 12px;
-      text-align: center;
-      border-bottom: 1px solid #444;
-    }
-
-    th {
-      background: #3a3a3a;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      position: sticky;
-      top: 0;
-      z-index: 2;
-    }
-
-    tr:nth-child(even) { background: #252525; }
-    tr:hover { background: #333; }
-
-    .first-place { font-size: 1.9em; font-weight: bold; color: #FFD700; }
-    .second-place { font-size: 1.6em; font-weight: bold; color: #C0C0C0; }
-    .third-place { font-size: 1.4em; font-weight: bold; color: #CD7F32; }
-
-    .perfect { box-shadow: inset 0 0 10px rgba(0,255,0,.5); }
-    .failed { opacity: .5; }
-
-    .bar { background:#444; border-radius:6px; height:10px; margin-top:4px; overflow:hidden; }
-    .bar-fill { height:100%; background:linear-gradient(90deg,#00ff99,#00cc66); }
-
-    button { background:#333; color:#eee; border:0; padding:8px 14px; margin:4px; border-radius:8px; cursor:pointer; }
-    button.active { background:linear-gradient(135deg,#ffd700,#ffb700); color:#000; font-weight:600; }
-
-    footer { text-align:center; margin-top:20px; font-size:.85em; opacity:.7; }
-  </style>
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -164,18 +89,48 @@ function setActive(type, value){
   document.querySelector(`button[data-${type}="${value}"]`).classList.add('active');
 }
 
-function render(){
-  let filtered = currentClass==='all' ? [...data] : data.filter(d=>d.class===currentClass);
+function getBestAttempts(entries) {
+  const bestMap = {};
 
+  entries.forEach(e => {
+    const key = `${e.name}__${e.class}`;
+    if (!bestMap[key]) {
+      bestMap[key] = e;
+      return;
+    }
+
+    // Melhor tentativa: mais condutores, depois melhor tempo
+    if (
+      e.wires > bestMap[key].wires ||
+      (e.wires === bestMap[key].wires && e.totalSeconds < bestMap[key].totalSeconds)
+    ) {
+      bestMap[key] = e;
+    }
+  });
+
+  return Object.values(bestMap);
+}
+
+function render(){
+  // 1) Filtrar por turma
+  let filtered = currentClass==='all'
+    ? [...data]
+    : data.filter(d=>d.class===currentClass);
+
+  // 2) Manter apenas a melhor tentativa por aluno (por turma)
+  filtered = getBestAttempts(filtered);
+
+  // 3) Ordenar dentro da turma
   filtered.sort((a,b)=>{
     if(currentSort==='time') return a.totalSeconds-b.totalSeconds;
-    if(currentSort==='date') return new Date(b.date.split('/').reverse())-new Date(a.date.split('/').reverse());
+    if(currentSort==='date') return new Date(b.date.split('/').reverse().join('-')) - new Date(a.date.split('/').reverse().join('-'));
     if(b.wires!==a.wires) return b.wires-a.wires;
     return a.totalSeconds-b.totalSeconds;
   });
 
   tbody.innerHTML='';
 
+  // 4) Ranking POR TURMA (reset automático ao filtrar)
   filtered.forEach((e,i)=>{
     const tr=document.createElement('tr');
     if(e.wires===8) tr.classList.add('perfect');
