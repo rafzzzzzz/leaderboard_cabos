@@ -202,7 +202,7 @@
           <th>Aluno</th>
           <th>Tempo</th>
           <th>Condutores</th>
-          <th>Pontuação</th>
+          <th>Tentativa</th>
           <th>Data</th>
         </tr>
       </thead>
@@ -211,33 +211,35 @@
   </div>
 
   <footer>
-    ⭐ Pontuação = (condutores × 100) − tempo (segundos)
+    ⭐ Tentativa = número de vezes que o aluno tentou fazer o clabe
   </footer>
 
   <script>
     const tbody = document.querySelector('#leaderboard tbody');
 
     const data = [
-      { name: 'Márcio 🥇', minutes: 13, seconds: 0, wires: 5, date: '14/01/2026' },
-      { name: 'Ian 🤫', minutes: 14, seconds: 30, wires: 8, date: '14/01/2026' },
-      { name: 'Diogo 🕉️', minutes: 13, seconds: 20, wires: 7, date: '14/01/2026' },
-      { name: 'Karia 😒', minutes: 19, seconds: 10, wires: 5, date: '14/01/2026' },
-      { name: 'Kilza ☺️', minutes: 27, seconds: 10, wires: 0, date: '14/01/2026' },
-      { name: 'Diogo 💀', minutes: 13, seconds: 30, wires: 8, date: '20/01/2026' },
-      { name: 'Vítor 🤓', minutes: 16, seconds: 0, wires: 8, date: '20/01/2026' },
-      { name: 'Carolina 👽', minutes: 22, seconds: 0, wires: 6, date: '20/01/2026' },
-      { name: 'Mildred 😭', minutes: 17, seconds: 6, wires: 6, date: '20/01/2026' },
-      { name: 'Maria 🏀', minutes: 28, seconds: 0, wires: 6, date: '20/01/2026' },
-      { name: 'Rodrigo 😵‍💫', minutes: 28, seconds: 0, wires: 2, date: '20/01/2026' },
-      { name: 'Alexy 😶‍🌫️', minutes: 22, seconds: 20, wires: 8, date: '20/01/2026' },
-      { name: 'Heitor 🤤', minutes: 30, seconds: 0, wires: 0, date: '20/01/2026' },
-      { name: 'Tomás 🥱', minutes: 30, seconds: 0, wires: 0, date: '20/01/2026' },
-      { name: 'Aniwilsa 😏', minutes: 13, seconds: 19, wires: 8, date: '21/01/2026' },
-      { name: 'Amilton 🤪', minutes: 14, seconds: 40, wires: 8, date: '21/01/2026' },
-      { name: 'Kevin 😥', minutes: 30, seconds: 0, wires: 0, date: '21/01/2026' },
-      { name: 'Carlos ⚽', minutes: 11, seconds: 40, wires: 6, date: '21/01/2026' },
-      { name: 'David 🤑', minutes: 21, seconds: 17, wires: 8, date: '21/01/2026' },
-      { name: 'Kilza ☺️', minutes: 24, seconds: 0, wires: 6, date: '21/01/2026' },
+      { name: 'Márcio 🥇', minutes: 13, seconds: 0, wires: 5, tentativa: 1, date: '14/01/2026' },
+      { name: 'Ian 🤫', minutes: 14, seconds: 30, wires: 8, tentativa: 1, date: '14/01/2026' },
+      { name: 'Diogo 🕉️', minutes: 13, seconds: 20, wires: 7, tentativa: 1, date: '14/01/2026' },
+      { name: 'Karia 😒', minutes: 19, seconds: 10, wires: 5, tentativa: 1, date: '14/01/2026' },
+      { name: 'Kilza ☺️', minutes: 27, seconds: 10, wires: 0, tentativa: 1, date: '14/01/2026' },
+      { name: 'Diogo 💀', minutes: 13, seconds: 30, wires: 8, tentativa: 1, date: '20/01/2026' },
+      { name: 'Vítor 🤓', minutes: 16, seconds: 0, wires: 8, tentativa: 1, date: '20/01/2026' },
+      { name: 'Carolina 👽', minutes: 22, seconds: 0, wires: 6, tentativa: 1, date: '20/01/2026' },
+      { name: 'Mildred 😭', minutes: 17, seconds: 6, wires: 6, tentativa: 1, date: '20/01/2026' },
+      { name: 'Maria 🏀', minutes: 28, seconds: 0, wires: 6, tentativa: 1, date: '20/01/2026' },
+      { name: 'Rodrigo 😵‍💫', minutes: 28, seconds: 0, wires: 2, tentativa: 1, date: '20/01/2026' },
+      { name: 'Alexy 😶‍🌫️', minutes: 22, seconds: 20, wires: 8, tentativa: 1, date: '20/01/2026' },
+      { name: 'Heitor 🤤', minutes: 30, seconds: 0, wires: 0, tentativa: 1, date: '20/01/2026' },
+      { name: 'Tomás 🥱', minutes: 30, seconds: 0, wires: 0, tentativa: 1, date: '20/01/2026' },
+      { name: 'Aniwilsa 😏', minutes: 13, seconds: 19, wires: 8, tentativa: 1, date: '21/01/2026' },
+      { name: 'Amilton 🤪', minutes: 14, seconds: 40, wires: 8, tentativa: 1, date: '21/01/2026' },
+      { name: 'Kevin 😥', minutes: 30, seconds: 0, wires: 0, tentativa: 1, date: '21/01/2026' },
+      { name: 'Carlos ⚽', minutes: 11, seconds: 40, wires: 6, tentativa: 1, date: '21/01/2026' },
+      { name: 'David 🤑', minutes: 21, seconds: 17, wires: 8, tentativa: 1, date: '21/01/2026' },
+      { name: 'Kilza ☺️', minutes: 24, seconds: 0, wires: 6, tentativa: 2, date: '21/01/2026' },
+      { name: 'Márcio 🥇', minutes: 14, seconds: 20, wires: 8, tentativa: 2, date: '21/01/2026' },
+
 
 
 
@@ -289,7 +291,6 @@
         else if (index === 2) nameClass = 'third-place';
 
         const percent = (entry.wires / 8) * 100;
-        const score = entry.wires * 100 - entry.totalSeconds;
 
         tr.innerHTML = `
           <td>${position}</td>
@@ -299,7 +300,7 @@
             ${entry.wires} / 8
             <div class="bar"><div class="bar-fill" style="width:${percent}%"></div></div>
           </td>
-          <td>${score}</td>
+          <td>${entry.tentativa}ª</td>
           <td>${entry.date}</td>
         `;
 
