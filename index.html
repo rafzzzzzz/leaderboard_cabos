@@ -69,246 +69,135 @@
       z-index: 2;
     }
 
-    tr {
-      animation: fadeIn 0.4s ease-in;
-    }
+    tr:nth-child(even) { background: #252525; }
+    tr:hover { background: #333; }
 
-    tr:nth-child(even) {
-      background: #252525;
-    }
+    .first-place { font-size: 1.9em; font-weight: bold; color: #FFD700; }
+    .second-place { font-size: 1.6em; font-weight: bold; color: #C0C0C0; }
+    .third-place { font-size: 1.4em; font-weight: bold; color: #CD7F32; }
 
-    tr:hover {
-      background: #333;
-      transform: scale(1.01);
-      transition: all 0.2s ease-in-out;
-    }
+    .perfect { box-shadow: inset 0 0 10px rgba(0,255,0,.5); }
+    .failed { opacity: .5; }
 
-    .first-place {
-      font-size: 1.9em;
-      font-weight: bold;
-      color: #FFD700;
-    }
+    .bar { background:#444; border-radius:6px; height:10px; margin-top:4px; overflow:hidden; }
+    .bar-fill { height:100%; background:linear-gradient(90deg,#00ff99,#00cc66); }
 
-    .second-place {
-      font-size: 1.6em;
-      font-weight: bold;
-      color: #C0C0C0;
-    }
+    button { background:#333; color:#eee; border:0; padding:8px 14px; margin:4px; border-radius:8px; cursor:pointer; }
+    button.active { background:linear-gradient(135deg,#ffd700,#ffb700); color:#000; font-weight:600; }
 
-    .third-place {
-      font-size: 1.4em;
-      font-weight: bold;
-      color: #CD7F32;
-    }
-
-    .perfect {
-      box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.5);
-    }
-
-    .failed {
-      opacity: 0.5;
-    }
-
-    .bar {
-      background: #444;
-      border-radius: 6px;
-      overflow: hidden;
-      height: 10px;
-      margin-top: 4px;
-    }
-
-    .bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #00ff99, #00cc66);
-      transition: width 0.5s ease;
-    }
-
-    button {
-      background: #333;
-      color: #e0e0e0;
-      border: none;
-      padding: 8px 14px;
-      margin: 4px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-family: 'Poppins', sans-serif;
-      transition: all 0.3s ease;
-    }
-
-    button.active {
-      background: linear-gradient(135deg, #ffd700, #ffb700);
-      color: #000;
-      box-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
-      font-weight: 600;
-    }
-
-    button:hover {
-      background: #555;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 0.85em;
-      opacity: 0.7;
-    }
-
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 2em;
-      }
-      table {
-        min-width: 100%;
-        font-size: 0.75em;
-      }
-      th, td {
-        padding: 6px 4px;
-      }
-      .bar {
-        height: 6px;
-      }
-      button {
-        padding: 6px 8px;
-        font-size: 0.75em;
-      }
-      th:nth-child(5), td:nth-child(5),
-      th:nth-child(6), td:nth-child(6) {
-        display: table-cell;
-      }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    footer { text-align:center; margin-top:20px; font-size:.85em; opacity:.7; }
   </style>
 </head>
 <body>
 
-  <h1>🏆 Leaderboard Cabos de Rede 🏆</h1>
-  <div class="subtitle">GEI/PI</div>
+<h1>🏆 Leaderboard Cabos de Rede 🏆</h1>
+<div class="subtitle">GEI / PI</div>
 
-  <div class="container">
-    <div style="text-align:center; margin-bottom:15px;">
-      <button data-sort="default" onclick="sortByDefault()" class="active">🏆 Ranking</button>
-      <button data-sort="time" onclick="sortByTime()">⏱ Melhor Tempo</button>
-      <button data-sort="wires" onclick="sortByWires()">🟢 Mais Condutores</button>
-      <button data-sort="date" onclick="sortByDate()">📅 Mais Recentes</button>
-    </div>
-    <table id="leaderboard">
-      <thead>
-        <tr>
-          <th>Posição</th>
-          <th>Aluno</th>
-          <th>Tempo</th>
-          <th>Condutores</th>
-          <th>Tentativa</th>
-          <th>Data</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+<div class="container">
+  <div style="text-align:center; margin-bottom:15px;">
+    <button data-sort="default" class="active" onclick="setSort('default')">🏆 Ranking</button>
+    <button data-sort="time" onclick="setSort('time')">⏱ Melhor Tempo</button>
+    <button data-sort="date" onclick="setSort('date')">📅 Mais Recentes</button>
   </div>
 
-  <footer>
-    ⭐ Tentativa = número de vezes que o aluno tentou fazer o clabe
-  </footer>
+  <div style="text-align:center; margin-bottom:15px;">
+    <button data-class="all" class="active" onclick="setClass('all')">Todas</button>
+    <button data-class="24PI" onclick="setClass('24PI')">24PI</button>
+    <button data-class="25PI" onclick="setClass('25PI')">25PI</button>
+    <button data-class="24GEI" onclick="setClass('24GEI')">24GEI</button>
+  </div>
 
-  <script>
-    const tbody = document.querySelector('#leaderboard tbody');
+  <table id="leaderboard">
+    <thead>
+      <tr>
+        <th>Posição</th>
+        <th>Aluno</th>
+        <th>Tempo</th>
+        <th>Condutores</th>
+        <th>Tentativa</th>
+        <th>Data</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
 
-    const data = [
-      { name: 'Márcio 🥇', minutes: 13, seconds: 0, wires: 5, tentativa: 1, date: '14/01/2026' },
-      { name: 'Ian 🤫', minutes: 14, seconds: 30, wires: 8, tentativa: 1, date: '14/01/2026' },
-      { name: 'Diogo 🕉️', minutes: 13, seconds: 20, wires: 7, tentativa: 1, date: '14/01/2026' },
-      { name: 'Karia 😒', minutes: 19, seconds: 10, wires: 5, tentativa: 1, date: '14/01/2026' },
-      { name: 'Kilza ☺️', minutes: 27, seconds: 10, wires: 0, tentativa: 1, date: '14/01/2026' },
-      { name: 'Diogo 💀', minutes: 13, seconds: 30, wires: 8, tentativa: 1, date: '20/01/2026' },
-      { name: 'Vítor 🤓', minutes: 16, seconds: 0, wires: 8, tentativa: 1, date: '20/01/2026' },
-      { name: 'Carolina 👽', minutes: 22, seconds: 0, wires: 6, tentativa: 1, date: '20/01/2026' },
-      { name: 'Mildred 😭', minutes: 17, seconds: 6, wires: 6, tentativa: 1, date: '20/01/2026' },
-      { name: 'Maria 🏀', minutes: 28, seconds: 0, wires: 6, tentativa: 1, date: '20/01/2026' },
-      { name: 'Rodrigo 😵‍💫', minutes: 28, seconds: 0, wires: 2, tentativa: 1, date: '20/01/2026' },
-      { name: 'Alexy 😶‍🌫️', minutes: 22, seconds: 20, wires: 8, tentativa: 1, date: '20/01/2026' },
-      { name: 'Heitor 🤤', minutes: 30, seconds: 0, wires: 0, tentativa: 1, date: '20/01/2026' },
-      { name: 'Tomás 🥱', minutes: 30, seconds: 0, wires: 0, tentativa: 1, date: '20/01/2026' },
-      { name: 'Aniwilsa 😏', minutes: 13, seconds: 19, wires: 8, tentativa: 1, date: '21/01/2026' },
-      { name: 'Amilton 🤪', minutes: 14, seconds: 40, wires: 8, tentativa: 1, date: '21/01/2026' },
-      { name: 'Kevin 😥', minutes: 30, seconds: 0, wires: 0, tentativa: 1, date: '21/01/2026' },
-      { name: 'Carlos ⚽', minutes: 11, seconds: 40, wires: 6, tentativa: 1, date: '21/01/2026' },
-      { name: 'David 🤑', minutes: 21, seconds: 17, wires: 8, tentativa: 1, date: '21/01/2026' },
-      { name: 'Kilza ☺️', minutes: 24, seconds: 0, wires: 6, tentativa: 2, date: '21/01/2026' },
-      { name: 'Márcio 🥇', minutes: 14, seconds: 20, wires: 8, tentativa: 2, date: '21/01/2026' },
+<footer>⭐ Tentativa = número de vezes que o aluno tentou fazer o cabo</footer>
 
+<script>
+const tbody = document.querySelector('#leaderboard tbody');
 
+const data = [
+  { name:'Márcio 🥇', minutes:13, seconds:0, wires:5, tentativa:1, class:'24GEI', date:'14/01/2026' },
+  { name:'Ian 🤫', minutes:14, seconds:30, wires:8, tentativa:1, class:'24GEI', date:'14/01/2026' },
+  { name:'Diogo 🕉️', minutes:13, seconds:20, wires:7, tentativa:1, class:'24GEI', date:'14/01/2026' },
+  { name:'Karia 😒', minutes:19, seconds:10, wires:5, tentativa:1, class:'24GEI', date:'14/01/2026' },
+  { name:'Kilza ☺️', minutes:27, seconds:10, wires:0, tentativa:1, class:'24GEI', date:'14/01/2026' },
+  { name:'Diogo 💀', minutes:13, seconds:30, wires:8, tentativa:1, class:'25PI', date:'20/01/2026' },
+  { name:'Vítor 🤓', minutes:16, seconds:0, wires:8, tentativa:1, class:'25PI', date:'20/01/2026' },
+  { name:'Carolina 👽', minutes:22, seconds:0, wires:6, tentativa:1, class:'25PI', date:'20/01/2026' },
+  { name:'Mildred 😭', minutes:17, seconds:6, wires:6, tentativa:1, class:'25PI', date:'20/01/2026' },
+  { name:'Maria 🏀', minutes:28, seconds:0, wires:6, tentativa:1, class:'25PI', date:'20/01/2026' },
+  { name:'Rodrigo 😵‍💫', minutes:28, seconds:0, wires:2, tentativa:1, class:'25PI', date:'20/01/2026' },
+  { name:'Alexy 😶‍🌫️', minutes:22, seconds:20, wires:8, tentativa:1, class:'24PI', date:'20/01/2026' },
+  { name:'Heitor 🤤', minutes:30, seconds:0, wires:0, tentativa:1, class:'24PI', date:'20/01/2026' },
+  { name:'Tomás 🥱', minutes:30, seconds:0, wires:0, tentativa:1, class:'24PI', date:'20/01/2026' },
+  { name:'Aniwilsa 😏', minutes:13, seconds:19, wires:8, tentativa:1, class:'24PI', date:'21/01/2026' },
+  { name:'Amilton 🤪', minutes:14, seconds:40, wires:8, tentativa:1, class:'24PI', date:'21/01/2026' },
+  { name:'Kevin 😥', minutes:30, seconds:0, wires:0, tentativa:1, class:'24PI', date:'21/01/2026' },
+  { name:'Carlos ⚽', minutes:11, seconds:40, wires:6, tentativa:1, class:'24PI', date:'21/01/2026' },
+  { name:'David 🤑', minutes:21, seconds:17, wires:8, tentativa:1, class:'24PI', date:'21/01/2026' },
+  { name:'Kilza ☺️', minutes:24, seconds:0, wires:6, tentativa:2, class:'24GEI', date:'21/01/2026' },
+  { name:'Márcio 🥇', minutes:14, seconds:20, wires:8, tentativa:2, class:'24GEI', date:'21/01/2026' }
+];
 
+data.forEach(d => d.totalSeconds = d.minutes*60 + d.seconds);
 
-    ];
+let currentSort = 'default';
+let currentClass = 'all';
 
-    data.forEach(d => d.totalSeconds = d.minutes * 60 + d.seconds);
+function setSort(sort){ currentSort = sort; setActive('sort', sort); render(); }
+function setClass(cls){ currentClass = cls; setActive('class', cls); render(); }
 
-    let currentSort = 'default';
+function setActive(type, value){
+  document.querySelectorAll(`button[data-${type}]`).forEach(b=>b.classList.remove('active'));
+  document.querySelector(`button[data-${type}="${value}"]`).classList.add('active');
+}
 
-    function setActiveButton(type) {
-      document.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
-      document.querySelector(`button[data-sort="${type}"]`).classList.add('active');
-    }
+function render(){
+  let filtered = currentClass==='all' ? [...data] : data.filter(d=>d.class===currentClass);
 
-    function sortByDefault() { currentSort = 'default'; setActiveButton('default'); render(); }
-    function sortByTime() { currentSort = 'time'; setActiveButton('time'); render(); }
-    function sortByWires() { currentSort = 'wires'; setActiveButton('wires'); render(); }
-    function sortByDate() { currentSort = 'date'; setActiveButton('date'); render(); }
-    
+  filtered.sort((a,b)=>{
+    if(currentSort==='time') return a.totalSeconds-b.totalSeconds;
+    if(currentSort==='date') return new Date(b.date.split('/').reverse())-new Date(a.date.split('/').reverse());
+    if(b.wires!==a.wires) return b.wires-a.wires;
+    return a.totalSeconds-b.totalSeconds;
+  });
 
-    function render() {
-      data.sort((a, b) => {
-        switch (currentSort) {
-          case 'time':
-            return a.totalSeconds - b.totalSeconds;
-          case 'wires':
-            return b.wires - a.wires;
-          case 'date':
-            return new Date(b.date.split('/').reverse().join('-')) - new Date(a.date.split('/').reverse().join('-'));
-          default:
-            if (b.wires !== a.wires) return b.wires - a.wires;
-            return a.totalSeconds - b.totalSeconds;
-        }
-      });
+  tbody.innerHTML='';
 
-      tbody.innerHTML = '';
+  filtered.forEach((e,i)=>{
+    const tr=document.createElement('tr');
+    if(e.wires===8) tr.classList.add('perfect');
+    if(e.wires===0) tr.classList.add('failed');
 
-      data.forEach((entry, index) => {
-        const tr = document.createElement('tr');
-        if (entry.wires === 8) tr.classList.add('perfect');
-        if (entry.wires === 0) tr.classList.add('failed');
+    const medal=i<3?['🥇','🥈','🥉'][i]:i+1;
+    const nameClass=i===0?'first-place':i===1?'second-place':i===2?'third-place':'';
+    const pct=(e.wires/8)*100;
 
-        const medals = ['🥇', '🥈', '🥉'];
-        const position = index < 3 ? medals[index] : index + 1;
+    tr.innerHTML=`
+      <td>${medal}</td>
+      <td class="${nameClass}">${e.name}</td>
+      <td>${e.minutes}m ${e.seconds}s</td>
+      <td>${e.wires}/8<div class="bar"><div class="bar-fill" style="width:${pct}%"></div></div></td>
+      <td>${e.tentativa}ª</td>
+      <td>${e.date}</td>`;
 
-        let nameClass = '';
-        if (index === 0) nameClass = 'first-place';
-        else if (index === 1) nameClass = 'second-place';
-        else if (index === 2) nameClass = 'third-place';
+    tbody.appendChild(tr);
+  });
+}
 
-        const percent = (entry.wires / 8) * 100;
-
-        tr.innerHTML = `
-          <td>${position}</td>
-          <td class="${nameClass}">${entry.name}</td>
-          <td>⏱ ${entry.minutes}m ${entry.seconds}s</td>
-          <td>
-            ${entry.wires} / 8
-            <div class="bar"><div class="bar-fill" style="width:${percent}%"></div></div>
-          </td>
-          <td>${entry.tentativa}ª</td>
-          <td>${entry.date}</td>
-        `;
-
-        tbody.appendChild(tr);
-      });
-    }
-
-    render();
-  </script>
+render();
+</script>
 </body>
 </html>
