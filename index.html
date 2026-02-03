@@ -18,18 +18,21 @@
 <h1>🏆 Leaderboard Cabos de Rede 🏆</h1>
 <div class="subtitle">GEI / PI</div>
 
-<div class="container">
-  <div style="text-align:center; margin-bottom:15px;">
-    <button data-sort="default" class="active" onclick="setSort('default')">🏆 Ranking</button>
-    <button data-sort="time" onclick="setSort('time')">⏱ Melhor Tempo</button>
-    <button data-sort="date" onclick="setSort('date')">📅 Mais Recentes</button>
-  </div>
 
   <div style="text-align:center; margin-bottom:15px;">
     <button data-class="all" class="active" onclick="setClass('all')">Todas</button>
     <button data-class="24PI" onclick="setClass('24PI')">24PI</button>
     <button data-class="25PI" onclick="setClass('25PI')">25PI</button>
     <button data-class="24GEI" onclick="setClass('24GEI')">24GEI</button>
+  </div>
+
+    <!-- Toggle Switch -->
+  <div style="text-align:center; margin-bottom:15px;">
+    <label class="toggle-switch">
+      <input type="checkbox" checked onchange="toggleBest(this)">
+      <span class="slider"></span>
+    </label>
+    <span style="margin-left:10px; font-weight:600;">Mostrar apenas melhor tentativa</span>
   </div>
 
   <table id="leaderboard">
@@ -46,8 +49,6 @@
     <tbody></tbody>
   </table>
 </div>
-
-<footer>⭐ Tentativa = número de vezes que o aluno tentou fazer o cabo</footer>
 
 <script>
 const tbody = document.querySelector('#leaderboard tbody');
@@ -80,7 +81,8 @@ const data = [
   { name:'Katia 😒', minutes:30, seconds:0, wires:0, tentativa:2, class:'24GEI', date:'02/02/2026' },
   { name:'Ian 🤫', minutes:6, seconds:18, wires:8, tentativa:2, class:'24GEI', date:'02/02/2026' },
   { name:'Diogo 💀', minutes:8, seconds:11, wires:6, tentativa:2, class:'25PI', date:'03/02/2026' },
-
+  { name:'Vítor 🤓', minutes:4, seconds:49, wires:8, tentativa:2, class:'25PI', date:'03/02/2026' },
+  { name:'Mildred 😭', minutes:7, seconds:58, wires:4, tentativa:2, class:'25PI', date:'03/02/2026' },
 
 
 
@@ -92,9 +94,15 @@ data.forEach(d => d.totalSeconds = d.minutes*60 + d.seconds);
 
 let currentSort = 'default';
 let currentClass = 'all';
+let showBestOnly = true;
 
 function setSort(sort){ currentSort = sort; setActive('sort', sort); render(); }
 function setClass(cls){ currentClass = cls; setActive('class', cls); render(); }
+
+function toggleBest(cb){
+  showBestOnly = cb.checked;
+  render();
+}
 
 function setActive(type, value){
   document.querySelectorAll(`button[data-${type}]`).forEach(b=>b.classList.remove('active'));
@@ -129,8 +137,10 @@ function render(){
     ? [...data]
     : data.filter(d=>d.class===currentClass);
 
-  // 2) Manter apenas a melhor tentativa por aluno (por turma)
-  filtered = getBestAttempts(filtered);
+  // 2) Conditionally manter apenas a melhor tentativa por aluno (por turma)
+  if (showBestOnly) {
+    filtered = getBestAttempts(filtered);
+  }
 
   // 3) Ordenar dentro da turma
   filtered.sort((a,b)=>{
