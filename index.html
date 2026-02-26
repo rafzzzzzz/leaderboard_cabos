@@ -120,6 +120,10 @@ const data = [
   { name:'Tomás 🥱', minutes:10, seconds:30, wires:2, tentativa:4, class:'24PI', date:'25/02/2026' },
   { name:'Márcio 🥇', minutes:3, seconds:53, wires:8, tentativa:6, class:'24GEI', date:'25/02/2026' },
   { name:'Márcio 🥇', minutes:3, seconds:30, wires:5, tentativa:7, class:'24GEI', date:'25/02/2026' },
+  { name:'Márcio 🥇', minutes:3, seconds:25, wires:6, tentativa:8, class:'24GEI', date:'25/02/2026' },
+
+  
+
 
 
 
@@ -146,9 +150,17 @@ function setActive(type, value){
 
 function getBestAttempts(entries) {
   const bestMap = {};
+  const attemptCountMap = {};
 
   entries.forEach(e => {
     const key = `${e.name}__${e.class}`;
+    
+    // Count total attempts
+    if (!attemptCountMap[key]) {
+      attemptCountMap[key] = 0;
+    }
+    attemptCountMap[key]++;
+    
     if (!bestMap[key]) {
       bestMap[key] = e;
       return;
@@ -161,6 +173,11 @@ function getBestAttempts(entries) {
     ) {
       bestMap[key] = e;
     }
+  });
+
+  // Add attempt count to best entries
+  Object.entries(bestMap).forEach(([key, entry]) => {
+    entry.totalAttempts = attemptCountMap[key];
   });
 
   return Object.values(bestMap);
@@ -196,13 +213,14 @@ function render(){
     const medal=i<3?['🥇','🥈','🥉'][i]:i+1;
     const nameClass=i===0?'first-place':i===1?'second-place':i===2?'third-place':'';
     const pct=(e.wires/8)*100;
+    const lockEmoji = e.totalAttempts === 8 ? ' 🔒' : '';
 
     tr.innerHTML=`
       <td>${medal}</td>
       <td class="${nameClass}">${e.name}</td>
       <td>${e.minutes}m ${e.seconds}s</td>
       <td>${e.wires}/8<div class="bar"><div class="bar-fill" style="width:${pct}%"></div></div></td>
-      <td>${e.tentativa}ª</td>
+      <td>${e.tentativa}ª${lockEmoji}</td>
       <td>${e.date}</td>`;
 
     tbody.appendChild(tr);
