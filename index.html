@@ -128,6 +128,21 @@ const data = [
   { name:'Diogo 🕉️', minutes:4, seconds:22, wires:8, tentativa:6, class:'24GEI', date:'02/03/2026' },
   { name:'Diogo 🕉️', minutes:5, seconds:0, wires:7, tentativa:7, class:'24GEI', date:'02/03/2026' },
   { name:'Ian com y 🤫', minutes:6, seconds:0, wires:3, tentativa:5, class:'24GEI', date:'02/03/2026' },
+  { name:'Vítor 🤓', minutes:3, seconds:51, wires:0, tentativa:4, class:'25PI', date:'03/03/2026' },
+  { name:'Mildred 😭', minutes:6, seconds:9, wires:8, tentativa:4, class:'25PI', date:'03/03/2026' },
+  { name:'Diogo 💀', minutes:5, seconds:7, wires:8, tentativa:4, class:'25PI', date:'03/03/2026' },
+  { name:'Rodrigo 😵‍💫', minutes:6, seconds:0, wires:0, tentativa:3, class:'25PI', date:'03/03/2026' },
+  { name:'Rodrigo 😵‍💫', minutes:10, seconds:3, wires:2, tentativa:4, class:'25PI', date:'03/03/2026' },
+  { name:'Kevin 😥', minutes:9, seconds:50, wires:6, tentativa:4, class:'24PI', date:'04/03/2026' },
+  { name:'Aniwilsa 😏', minutes:4, seconds:26, wires:8, tentativa:5, class:'24PI', date:'04/03/2026' },
+  { name:'David 🤑', minutes:5, seconds:59, wires:8, tentativa:3, class:'24PI', date:'04/03/2026' },
+  { name:'David 🤑', minutes:4, seconds:50, wires:8, tentativa:4, class:'24PI', date:'04/03/2026' },
+  { name:'Heitor 🤤', minutes:3, seconds:54, wires:2, tentativa:4, class:'24PI', date:'04/03/2026' },
+  { name:'Kevin 😥', minutes:5, seconds:50, wires:8, tentativa:5, class:'24PI', date:'04/03/2026' },
+
+
+
+
 
 
 
@@ -160,6 +175,7 @@ function setActive(type, value){
 function getBestAttempts(entries) {
   const bestMap = {};
   const attemptCountMap = {};
+  const bestAttemptNumberMap = {};
 
   entries.forEach(e => {
     const key = `${e.name}__${e.class}`;
@@ -172,6 +188,7 @@ function getBestAttempts(entries) {
     
     if (!bestMap[key]) {
       bestMap[key] = e;
+      bestAttemptNumberMap[key] = e.tentativa;
       return;
     }
 
@@ -181,12 +198,14 @@ function getBestAttempts(entries) {
       (e.wires === bestMap[key].wires && e.totalSeconds < bestMap[key].totalSeconds)
     ) {
       bestMap[key] = e;
+      bestAttemptNumberMap[key] = e.tentativa;
     }
   });
 
-  // Add attempt count to best entries
+  // Add attempt count and best attempt number to best entries
   Object.entries(bestMap).forEach(([key, entry]) => {
     entry.totalAttempts = attemptCountMap[key];
+    entry.bestAttemptNumber = bestAttemptNumberMap[key];
   });
 
   return Object.values(bestMap);
@@ -223,13 +242,23 @@ function render(){
     const nameClass=i===0?'first-place':i===1?'second-place':i===2?'third-place':'';
     const pct=(e.wires/8)*100;
     const lockEmoji = e.totalAttempts === 8 ? ' 🔒' : '';
+    
+    // Format tentativa display
+    let tentativaText = '';
+    if (showBestOnly && e.totalAttempts) {
+      // Show best attempt number of total attempts
+      tentativaText = `${e.bestAttemptNumber}ª de ${e.totalAttempts}${lockEmoji}`;
+    } else {
+      // Show only the attempt number
+      tentativaText = `${e.tentativa}ª${lockEmoji}`;
+    }
 
     tr.innerHTML=`
       <td>${medal}</td>
       <td class="${nameClass}">${e.name}</td>
       <td>${e.minutes}m ${e.seconds}s</td>
       <td>${e.wires}/8<div class="bar"><div class="bar-fill" style="width:${pct}%"></div></div></td>
-      <td>${e.tentativa}ª${lockEmoji}</td>
+      <td>${tentativaText}</td>
       <td>${e.date}</td>`;
 
     tbody.appendChild(tr);
