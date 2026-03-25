@@ -12,6 +12,16 @@
 
   <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css">
+  <style>
+    .student-link{color:inherit;text-decoration:underline;cursor:pointer}
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;padding:20px;z-index:9999}
+    .modal{background:#121212;color:#e0e0e0;border-radius:8px;max-width:800px;width:100%;padding:18px;box-shadow:0 10px 40px rgba(0,0,0,.6);}
+    .modal h2{margin:0 0 8px}
+    .modal .close{float:right;background:#2a2a2a;color:#e0e0e0;border:0;padding:6px 10px;border-radius:6px;cursor:pointer}
+    .attempts-list{max-height:200px;overflow:auto;margin:8px 0;padding:0;list-style:none}
+    .attempts-list li{padding:6px 0;border-bottom:1px solid #f0f0f0}
+    .chart-wrap{width:100%;height:220px}
+  </style>
 </head>
 <body>
 
@@ -48,6 +58,17 @@
     </thead>
     <tbody></tbody>
   </table>
+</div>
+
+<!-- Student modal -->
+<div id="studentOverlay" class="modal-overlay">
+  <div class="modal" role="dialog" aria-modal="true">
+    <button class="close" onclick="closeStudent()">Fechar</button>
+    <h2 id="studentName">Aluno</h2>
+    <div class="chart-wrap"><canvas id="attemptChart" width="700" height="200"></canvas></div>
+    <h3>Tentativas</h3>
+    <ul id="attemptsList" class="attempts-list"></ul>
+  </div>
 </div>
 
 <script>
@@ -139,7 +160,7 @@ const data = [
   { name:'David 🤑', minutes:4, seconds:50, wires:8, tentativa:4, class:'24PI', date:'04/03/2026' },
   { name:'Heitor 🤤', minutes:3, seconds:54, wires:2, tentativa:4, class:'24PI', date:'04/03/2026' },
   { name:'Kevin 😥', minutes:5, seconds:50, wires:8, tentativa:5, class:'24PI', date:'04/03/2026' },
-  { name:'Ian com y 🤫', minutes:12, seconds:15, wires:8, tentativa:5, class:'24GEI', date:'09/03/2026'},
+  { name:'Ian com y 🤫', minutes:12, seconds:15, wires:8, tentativa:6, class:'24GEI', date:'09/03/2026'},
   { name:'Vítor 🤓', minutes:3, seconds:17, wires:8, tentativa:5, class:'25PI', date:'10/03/2026' },
   { name:'Diogo 💀', minutes:5, seconds:21, wires:6, tentativa:5, class:'25PI', date:'10/03/2026' },
   { name:'Heitor 🤤', minutes:3, seconds:25, wires:6, tentativa:5, class:'24PI', date:'11/03/2026' },
@@ -168,21 +189,27 @@ const data = [
   { name:'Maria 🏀', minutes:3, seconds:40, wires:4, tentativa:6, class:'25PI', date:'19/03/2026' },
   { name:'Diogo 💀', minutes:4, seconds:34, wires:6, tentativa:6, class:'25PI', date:'19/03/2026' },
   { name:'Diogo 💀', minutes:30, seconds:0, wires:0, tentativa:7, class:'25PI', date:'19/03/2026' },
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
+  { name:'Diogo 🕉️', minutes:4, seconds:24, wires:6, tentativa:8, class:'24GEI', date:'23/03/2026' },
+  { name:'Ian com y 🤫', minutes:12, seconds:40, wires:4, tentativa:7, class:'24GEI', date:'23/03/2026'},
+  { name:'David 🤑', minutes:3, seconds:40, wires:4, tentativa:7, class:'24PI', date:'25/03/2026' },
+  { name:'David 🤑', minutes:3, seconds:5, wires:8, tentativa:8, class:'24PI', date:'25/03/2026' },
+  { name:'Kevin 😥', minutes:4, seconds:28, wires:6, tentativa:7, class:'24PI', date:'25/03/2026' },
+  { name:'Heitor 🤤', minutes:2, seconds:40, wires:6, tentativa:7, class:'24PI', date:'25/03/2026' },
+  { name:'Aniwilsa 😏', minutes:4, seconds:30, wires:4, tentativa:7, class:'24PI', date:'25/03/2026' },
+  { name:'Aniwilsa 😏', minutes:30, seconds:0, wires:0, tentativa:8, class:'24PI', date:'25/03/2026' },
+  { name:'Alexy 😶‍🌫️', minutes:3, seconds:45, wires:8, tentativa:4, class:'24PI', date:'25/03/2026' },
+  { name:'Alexy 😶‍🌫️', minutes:30, seconds:0, wires:0, tentativa:5, class:'24PI', date:'25/03/2026' },
+  { name:'Alexy 😶‍🌫️', minutes:30, seconds:0, wires:0, tentativa:6, class:'24PI', date:'25/03/2026' },
+  { name:'Alexy 😶‍🌫️', minutes:2, seconds:57, wires:6, tentativa:7, class:'24PI', date:'25/03/2026' },
+  { name:'Alexy 😶‍🌫️', minutes:30, seconds:0, wires:0, tentativa:8, class:'24PI', date:'25/03/2026' },
+  { name:'Kevin 😥', minutes:2, seconds:59, wires:8, tentativa:8, class:'24PI', date:'25/03/2026' },
+  { name:'Heitor 🤤', minutes:2, seconds:45, wires:0, tentativa:8, class:'24PI', date:'25/03/2026' },
+  { name:'Carlos ⚽', minutes:3, seconds:27, wires:6, tentativa:7, class:'24PI', date:'25/03/2026' },
+  { name:'Carlos ⚽', minutes:3, seconds:26, wires:5, tentativa:8, class:'24PI', date:'25/03/2026' },
+  { name:'Tomás 🥱', minutes:7, seconds:30, wires:0, tentativa:6, class:'24PI', date:'25/03/2026' },
+  { name:'Ian com y 🤫', minutes:30, seconds:0, wires:0, tentativa:8, class:'24GEI', date:'25/03/2026'},
+  { name:'Katia 😒', minutes:10, seconds:30, wires:8, tentativa:7, class:'24GEI', date:'25/03/2026' },
+  { name:'Katia 😒', minutes:7, seconds:10, wires:8, tentativa:8, class:'24GEI', date:'25/03/2026' },
 
   
 
@@ -246,6 +273,87 @@ function getBestAttempts(entries) {
   return Object.values(bestMap);
 }
 
+// --- Student modal and chart ---
+function openStudent(name){
+  name = decodeURIComponent(name);
+  const overlay = document.getElementById('studentOverlay');
+  const title = document.getElementById('studentName');
+  const list = document.getElementById('attemptsList');
+  const canvas = document.getElementById('attemptChart');
+
+  const attempts = data.filter(d => d.name===name).sort((a,b)=>a.tentativa-b.tentativa);
+  title.textContent = name + ' — Progresso';
+  list.innerHTML = '';
+  if(attempts.length===0){ list.innerHTML = '<li>Nenhuma tentativa encontrada.</li>'; }
+  attempts.forEach(a=>{
+    const li = document.createElement('li');
+    li.textContent = `${a.tentativa}ª — ${a.minutes}m ${a.seconds}s — ${a.wires}/8 — ${a.date} (${a.class})`;
+    list.appendChild(li);
+  });
+
+  drawAttemptChart(canvas, attempts);
+  overlay.style.display = 'flex';
+}
+
+function closeStudent(){ document.getElementById('studentOverlay').style.display='none'; }
+
+function drawAttemptChart(canvas, attempts){
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  if(!attempts || attempts.length===0) return;
+
+  const padding = {l:40,r:20,t:20,b:30};
+  const w = canvas.width - padding.l - padding.r;
+  const h = canvas.height - padding.t - padding.b;
+
+  const xs = attempts.map(a=>a.tentativa);
+  const ys = attempts.map(a=>a.totalSeconds);
+  const minY = Math.min(...ys);
+  const maxY = Math.max(...ys);
+
+  const scaleX = i => padding.l + ((i-1)/(8-1))*w;
+  // Invert Y so lower times appear lower on the canvas
+  const scaleY = v => padding.t + h - ( (v - minY) / (maxY - minY || 1) ) * h;
+
+  // Draw axes
+  ctx.strokeStyle = '#666'; ctx.lineWidth=1; ctx.beginPath();
+  ctx.moveTo(padding.l,padding.t); ctx.lineTo(padding.l,padding.t+h); ctx.lineTo(padding.l+w,padding.t+h); ctx.stroke();
+
+  // Draw labels and grid (light color for dark modal)
+  ctx.fillStyle='#e0e0e0'; ctx.font='12px Poppins, sans-serif';
+  for(let i=1;i<=8;i++){
+    const x = scaleX(i);
+    ctx.fillText(i+'ª', x-8, padding.t+h+18);
+  }
+
+  // Plot line
+  ctx.beginPath();
+  attempts.forEach((a,idx)=>{
+    const x = scaleX(a.tentativa);
+    const y = scaleY(a.totalSeconds);
+    if(idx===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  });
+  ctx.strokeStyle='#1f77b4'; ctx.lineWidth=2; ctx.stroke();
+
+  // Points
+  attempts.forEach(a=>{
+    const x = scaleX(a.tentativa);
+    const y = scaleY(a.totalSeconds);
+    // color by wires
+    const color = a.wires===8? '#2ca02c' : (a.wires===0? '#d62728' : '#ff7f0e');
+    ctx.fillStyle = color;
+    ctx.beginPath(); ctx.arc(x,y,5,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#e0e0e0'; ctx.font='11px Poppins, sans-serif';
+    ctx.fillText(`${a.minutes}m ${a.seconds}s`, x+8, y-6);
+  });
+}
+
+// Delegate clicks to student links
+document.addEventListener('click', e=>{
+  const a = e.target.closest && e.target.closest('.student-link');
+  if(a){ e.preventDefault(); openStudent(a.dataset.name); }
+});
+
 function render(){
   // 1) Filtrar por turma
   let filtered = currentClass==='all'
@@ -290,7 +398,7 @@ function render(){
 
     tr.innerHTML=`
       <td>${medal}</td>
-      <td class="${nameClass}">${e.name}</td>
+      <td class="${nameClass}"><a href="#" class="student-link" data-name="${encodeURIComponent(e.name)}">${e.name}</a></td>
       <td>${e.minutes}m ${e.seconds}s</td>
       <td>${e.wires}/8<div class="bar"><div class="bar-fill" style="width:${pct}%"></div></div></td>
       <td>${tentativaText}</td>
